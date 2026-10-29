@@ -29,7 +29,10 @@
 
 ### 소스코드 작성 시
 
-- @Docs\CodingConvention\ArchitectureConvention.md
-- @Docs\CodingConvention\CodingConvention.md
-- @Docs\CodingConvention\UnityConvention.md
+- `@Docs\CodingConvention\ArchitectureConvention.md`
+- `@Docs\CodingConvention\CodingConvention.md`
+- `@Docs\CodingConvention\UnityConvention.md`
+
+### Github Issue 관련
+- `@Docs\Documentation\Github Issue Rule.md`
 
