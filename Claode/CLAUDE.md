@@ -23,6 +23,7 @@
 ## 상시 로드 (매 세션 적용)
 
 @Docs\Claude\ClaudeCodeRules.md
+@Docs\Claude\WorkflowRules.md
 @Docs\TechSpec.md
 
 ## 온디맨드 참조 (매 세션 읽지 않음 - 해당 작업을 할 때만 읽음)
@@ -33,6 +34,7 @@
 - `@Docs\CodingConvention\CodingConvention.md`
 - `@Docs\CodingConvention\UnityConvention.md`
 
-### Github Issue 관련
-- `@Docs\Documentation\Github Issue Rule.md`
+## 스킬 (해당 작업 시 호출)
+
+- Github Issue 등록 / 권유 : `github-issue` 스킬을 호출한다. (`.claude\skills\github-issue\SKILL.md`)
 
