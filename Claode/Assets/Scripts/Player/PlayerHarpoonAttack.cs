@@ -7,7 +7,6 @@ public class PlayerHarpoonAttack : MonoBehaviour
     [SerializeField] private InputActionReference _attackAction;
     [FormerlySerializedAs("_harpoon")]
     [SerializeField] private Harpoon _harpoonPrefab;
-    [SerializeField] private Transform _cameraTransform;
     [SerializeField] private Transform _firePoint;
 
     private Harpoon _harpoon;
@@ -25,7 +24,7 @@ public class PlayerHarpoonAttack : MonoBehaviour
             return;
         }
 
-        _harpoon.Launch(_firePoint.position, _cameraTransform.forward, _firePoint);
+        _harpoon.Launch(_firePoint.position, _firePoint.forward, _firePoint);
     }
 
     private void OnDisable() => _attackAction.action.Disable();
