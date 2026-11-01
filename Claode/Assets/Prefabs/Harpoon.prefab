@@ -51,7 +51,7 @@ MonoBehaviour:
   _stuckDuration: 3
   _hitLayers:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 183
 --- !u!1 &4386169616809204640
 GameObject:
   m_ObjectHideFlags: 0

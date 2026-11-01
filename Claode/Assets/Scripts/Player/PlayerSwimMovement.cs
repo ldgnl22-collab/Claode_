@@ -35,6 +35,9 @@ public class PlayerSwimMovement : MonoBehaviour
     private void FixedUpdate()
     {
         _rigidbody.AddForce(Vector3.ClampMagnitude(_swimDirection, 1f) * _swimForce, ForceMode.Acceleration);
+
+        // 카메라 회전은 roll이 0이고 pitch가 제한되어 있으므로, 그대로 따라가도 뒤집히지 않는다
+        _rigidbody.MoveRotation(_cameraTransform.rotation);
     }
 
     private void OnDisable() => _moveAction.action.Disable();
