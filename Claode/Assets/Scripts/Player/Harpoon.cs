@@ -15,17 +15,22 @@ public class Harpoon : MonoBehaviour
     [SerializeField] private float _maxDistance = 20f;
     [SerializeField] private float _stuckDuration = 3f;
     [SerializeField] private LayerMask _hitLayers = ~0;
+    [SerializeField] private float _mashGain = 0.2f;
+    [SerializeField] private float _gaugeDecayRate = 0.3f;
 
     private HarpoonState _state = HarpoonState.Ready;
     private Transform _returnTarget;
     private float _traveledDistance;
     private float _stuckTimer;
+    private float _mashGauge;
     private Enemy _draggedEnemy;
     private Vector3 _stuckLocalPosition;
     private Quaternion _stuckLocalRotation;
     private Vector3 _dragOffset;
 
     public bool IsReady => _state == HarpoonState.Ready;
+    public bool IsStuck => _state == HarpoonState.Stuck;
+    public float MashGauge => _mashGauge;
 
     private void Update()
     {
@@ -51,6 +56,17 @@ public class Harpoon : MonoBehaviour
 
         transform.SetPositionAndRotation(origin, Quaternion.LookRotation(direction));
         gameObject.SetActive(true);
+    }
+
+    public void Mash()
+    {
+        // 적에게 박혀 있는 동안의 연타만 게이지에 반영한다
+        if (_state != HarpoonState.Stuck)
+        {
+            return;
+        }
+
+        _mashGauge = Mathf.Min(1f, _mashGauge + _mashGain);
     }
 
     private void Fly()
@@ -94,6 +110,7 @@ public class Harpoon : MonoBehaviour
         _stuckLocalPosition = target.InverseTransformPoint(hitPoint);
         _stuckLocalRotation = Quaternion.Inverse(target.rotation) * transform.rotation;
         _stuckTimer = _stuckDuration;
+        _mashGauge = 0f;
         _state = HarpoonState.Stuck;
     }
 
@@ -104,11 +121,20 @@ public class Harpoon : MonoBehaviour
             target.TransformPoint(_stuckLocalPosition),
             target.rotation * _stuckLocalRotation);
 
-        _stuckTimer -= Time.deltaTime;
-        if (_stuckTimer <= 0f)
+        // 게이지가 가득 차면 즉시 끌어오고, 제한 시간 안에 채우지 못하면 적을 놓고 작살만 회수한다
+        if (_mashGauge >= 1f)
         {
             // 회수 중에는 작살이 적을 끌고 오므로, 작살 기준 적의 위치 차이를 기억한다
             _dragOffset = target.position - transform.position;
+            _state = HarpoonState.Returning;
+            return;
+        }
+
+        _mashGauge = Mathf.Max(0f, _mashGauge - _gaugeDecayRate * Time.deltaTime);
+        _stuckTimer -= Time.deltaTime;
+        if (_stuckTimer <= 0f)
+        {
+            _draggedEnemy = null;
             _state = HarpoonState.Returning;
         }
     }
